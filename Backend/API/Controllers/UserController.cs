@@ -24,10 +24,20 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<UserDto>> Get()
+    public async Task<ActionResult<IEnumerable<UserDto>>> Get()
     {
         var users = await _userRepo.GetUsersAsync();
 
-        return _mapper.Map<IEnumerable<UserDto>>(users);
+        return _mapper.Map<List<UserDto>>(users);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUser(int id)
+    {
+        var user = await _userRepo.GetUserByIdAsync(id);
+
+        if (user == null) return NotFound();
+        
+        return _mapper.Map<UserDto>(user);
     }
 }
