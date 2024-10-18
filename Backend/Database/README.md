@@ -1,6 +1,6 @@
 ﻿### EF Migrations Command
 
-dotnet ef migrations add MIGRATION_NAME -o Database/Migrations -p Database -s API
+dotnet ef migrations add MIGRATION_NAME -o Migrations -p Database -s API
 
 
 ### EF Update Command
