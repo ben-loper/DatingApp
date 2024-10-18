@@ -12,7 +12,7 @@ public class UserController : BaseApiController<UserController>
 {
     private readonly IUserRepository _userRepo;
 
-    public UserController(ILogger<UserController> logger, IUserRepository userRepo, IMapper mapper) : base (logger, mapper)
+    public UserController(ILogger<UserController> logger, IUserRepository userRepo, IMapper mapper) : base(logger, mapper)
     {
         _userRepo = userRepo;
     }
@@ -31,7 +31,7 @@ public class UserController : BaseApiController<UserController>
         var user = await _userRepo.GetUserByIdAsync(id);
 
         if (user == null) return NotFound();
-        
+
         return _mapper.Map<UserDto>(user);
     }
 }

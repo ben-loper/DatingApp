@@ -1,5 +1,4 @@
 ﻿using Database.Data;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Database.Repositories
 {
@@ -7,5 +6,7 @@ namespace Database.Repositories
     {
         public Task<List<AppUser>> GetUsersAsync();
         public Task<AppUser?> GetUserByIdAsync(int id);
+        public Task<AppUser?> GetUserByUsernameAsync(string username);
+        public Task<AppUser?> SaveUserAsync(AppUser user);
     }
 }
