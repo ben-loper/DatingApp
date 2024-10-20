@@ -15,7 +15,7 @@ namespace Infrastructure.Services
             _userRepository = userRepository;
         }
 
-        public async Task<AppUser> CreateUser(string username, string password)
+        public async Task<AppUser> CreateUserAsync(string username, string password)
         {
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
@@ -31,6 +31,24 @@ namespace Infrastructure.Services
             };
 
             return await _userRepository.SaveUserAsync(user);
+        }
+
+        public async Task<bool> LogInAsync(string username, string password)
+        {
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            if (user == null) return false;
+
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+            for (int i = 0; i < computedHash.Length; i++)
+            {
+                if (computedHash[i] != user.PasswordHash[i]) return false;
+            }
+
+            return true;
         }
     }
 }

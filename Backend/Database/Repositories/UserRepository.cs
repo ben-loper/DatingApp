@@ -28,9 +28,7 @@ namespace Database.Repositories
 
             if (string.IsNullOrWhiteSpace(trimmedUsername)) throw new InvalidInputException(nameof(username));
 
-            var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName.ToLower() == trimmedUsername.ToLower());
-
-            return user;
+            return await _context.Users.SingleOrDefaultAsync(user => user.UserName.ToLower() == trimmedUsername.ToLower());
         }
 
         public async Task<List<AppUser>> GetUsersAsync()
@@ -38,7 +36,7 @@ namespace Database.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<AppUser?> SaveUserAsync(AppUser user)
+        public async Task<AppUser> SaveUserAsync(AppUser user)
         {
             var existingUser = await GetUserByUsernameAsync(user.UserName);
 
@@ -46,9 +44,9 @@ namespace Database.Repositories
 
             user.UserName = user.UserName.Trim();
 
-            var newUser = await _context.Users.AddAsync(user);
+            var newUser = _context.Users.Add(user);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return newUser.Entity;
         }

@@ -7,6 +7,6 @@ namespace Database.Repositories
         public Task<List<AppUser>> GetUsersAsync();
         public Task<AppUser?> GetUserByIdAsync(int id);
         public Task<AppUser?> GetUserByUsernameAsync(string username);
-        public Task<AppUser?> SaveUserAsync(AppUser user);
+        public Task<AppUser> SaveUserAsync(AppUser user);
     }
 }

@@ -4,7 +4,7 @@
     {
         public InvalidInputException(string message) : base(message)
         {
-            
+
         }
     }
 }

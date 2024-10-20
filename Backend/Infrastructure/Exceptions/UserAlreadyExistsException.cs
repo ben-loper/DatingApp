@@ -4,7 +4,7 @@
     {
         public UserAlreadyExistsException(string message) : base(message)
         {
-            
+
         }
     }
 }
