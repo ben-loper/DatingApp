@@ -2,7 +2,7 @@
 {
     public class UserDto
     {
-        public int Id { get; set; }
-        public required string UserName { get; set; }
+        public required string Jwt { get; set; }
+        public required string NameId { get; set; }
     }
 }

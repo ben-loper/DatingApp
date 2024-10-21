@@ -8,19 +8,13 @@ using System.Threading.Tasks;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
+public class UserController : BaseApiController<UserController>
 {
-    private readonly ILogger<UserController> _logger;
     private readonly IUserRepository _userRepo;
-    private readonly IMapper _mapper;
 
-    public UserController(ILogger<UserController> logger, IUserRepository userRepo, IMapper mapper)
+    public UserController(ILogger<UserController> logger, IUserRepository userRepo, IMapper mapper) : base(logger, mapper)
     {
-        _logger = logger;
         _userRepo = userRepo;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -37,7 +31,7 @@ public class UserController : ControllerBase
         var user = await _userRepo.GetUserByIdAsync(id);
 
         if (user == null) return NotFound();
-        
+
         return _mapper.Map<UserDto>(user);
     }
 }
