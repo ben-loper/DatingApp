@@ -22,6 +22,7 @@ namespace Infrastructure.Services.Token
         {
             var tokenKey = _config["TokenKey"] ?? throw new MissingTokenKeyException("Cannot find token key from config using key [TokenKey]");
 
+            // This is because of the signature we are using requires 64 character string
             if (tokenKey.Length < 64) throw new TokenKeyTooShortException("Token key length is less than 64 characters");
 
             // Symmetric => One key to encrypt and decrypt
