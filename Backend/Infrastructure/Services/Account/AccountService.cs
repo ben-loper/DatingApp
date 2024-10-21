@@ -1,18 +1,21 @@
 ﻿using Database.Data;
 using Database.Repositories;
 using Infrastructure.Exceptions;
+using Infrastructure.Services.Token;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Infrastructure.Services
+namespace Infrastructure.Services.Account
 {
     public class AccountService : IAccountService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
 
-        public AccountService(IUserRepository userRepository)
+        public AccountService(IUserRepository userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         public async Task<AppUser> CreateUserAsync(string username, string password)
@@ -33,11 +36,11 @@ namespace Infrastructure.Services
             return await _userRepository.SaveUserAsync(user);
         }
 
-        public async Task<bool> LogInAsync(string username, string password)
+        public async Task<string> LogInAsync(string username, string password)
         {
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
-            if (user == null) return false;
+            if (user == null) throw new UserDoesNotExistException($"The user [{username}] does not exist");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -45,10 +48,10 @@ namespace Infrastructure.Services
 
             for (int i = 0; i < computedHash.Length; i++)
             {
-                if (computedHash[i] != user.PasswordHash[i]) return false;
+                if (computedHash[i] != user.PasswordHash[i]) throw new IncorrectPasswordException("The password entered does not match");
             }
 
-            return true;
+            return _tokenService.CreateToken(user);
         }
     }
 }

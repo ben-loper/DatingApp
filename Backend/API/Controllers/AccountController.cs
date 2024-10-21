@@ -1,7 +1,7 @@
 ﻿using API.Models;
 using AutoMapper;
 using Infrastructure.Exceptions;
-using Infrastructure.Services;
+using Infrastructure.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -40,22 +40,28 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(AuthRequestDto loginRequestDto)
+        public async Task<ActionResult<UserDto>> Login(AuthRequestDto loginRequestDto)
         {
-            var loginSuccess = false;
-
             try
             {
-                loginSuccess = await _accountService.LogInAsync(loginRequestDto.UserName, loginRequestDto.Password);
+                var userToken = await _accountService.LogInAsync(loginRequestDto.UserName, loginRequestDto.Password);
+
+                return new UserDto
+                {
+                    Jwt = userToken,
+                    NameId = loginRequestDto.UserName
+                };
+            }
+            catch (Exception ex) when (ex is UserDoesNotExistException or IncorrectPasswordException)
+            {
+                _logger.Log(LogLevel.Error, $"Failed login attempt for user {loginRequestDto.UserName}");
+                return BadRequest("Username or password is incorrect");
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, $"Unexpected error occurred - {ex}");
                 return StatusCode(500, "Unexpected error occurred while processing the request");
             }
-
-            if (loginSuccess) return Ok();
-            else return BadRequest("Username or password incorrect");
         }
     }
 }
