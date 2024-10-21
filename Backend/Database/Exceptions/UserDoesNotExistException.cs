@@ -1,7 +1,6 @@
 ﻿namespace Database.Exceptions
 {
-    public class UserDoesNotExistException : Exception
+    public class UserDoesNotExistException(string message) : Exception(message)
     {
-        public UserDoesNotExistException(string message) : base(message) { }
     }
 }

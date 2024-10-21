@@ -1,10 +1,6 @@
 ﻿namespace Database.Exceptions
 {
-    public class InvalidInputException : Exception
+    public class InvalidInputException(string message) : Exception(message)
     {
-        public InvalidInputException(string message) : base(message)
-        {
-
-        }
     }
 }

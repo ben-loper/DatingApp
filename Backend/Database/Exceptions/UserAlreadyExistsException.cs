@@ -1,10 +1,6 @@
 ﻿namespace Database.Exceptions
 {
-    public class UserAlreadyExistsException : Exception
+    public class UserAlreadyExistsException(string message) : Exception(message)
     {
-        public UserAlreadyExistsException(string message) : base(message)
-        {
-
-        }
     }
 }
