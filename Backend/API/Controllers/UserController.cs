@@ -1,6 +1,7 @@
 using API.Models;
 using AutoMapper;
 using Database.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ public class UserController : BaseApiController<UserController>
         _userRepo = userRepo;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> Get()
     {

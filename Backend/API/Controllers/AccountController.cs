@@ -2,6 +2,7 @@
 using AutoMapper;
 using Infrastructure.Exceptions;
 using Infrastructure.Services.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,6 +19,7 @@ namespace API.Controllers
             _accountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> Register(AuthRequestDto registerRequestDto)
         {
@@ -39,6 +41,7 @@ namespace API.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(AuthRequestDto loginRequestDto)
         {

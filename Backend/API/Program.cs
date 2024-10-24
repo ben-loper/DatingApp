@@ -1,13 +1,7 @@
 using API.Profiles;
-using Database.Data;
-using Database.Repositories;
-using Infrastructure.Services.Account;
-using Infrastructure.Services.Token;
+using API.Utils;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 internal class Program
 {
@@ -20,15 +14,8 @@ internal class Program
 
         builder.Services.AddAutoMapper(typeof(MainProfile));
 
-        // Add DB Context
-        builder.Services.AddDbContext<DataContext>(options =>
-        {
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
-
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IAccountService, AccountService>();
-        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddApplicationContext(builder.Configuration);
+        builder.Services.AddApplicationServices(builder.Configuration);
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -38,7 +25,7 @@ internal class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        if (app.IsLocal())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
