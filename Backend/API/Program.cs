@@ -15,7 +15,8 @@ internal class Program
         builder.Services.AddAutoMapper(typeof(MainProfile));
 
         builder.Services.AddApplicationContext(builder.Configuration);
-        builder.Services.AddApplicationServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
+        builder.Services.AddIdentityServices(builder.Configuration);
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
