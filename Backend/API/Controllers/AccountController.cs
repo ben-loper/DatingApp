@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register(AuthRequestDto registerRequestDto)
         {
             try
@@ -34,7 +34,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, $"Unexpected error occurred - {ex}");
+                _logger.Log(LogLevel.Error, "Unexpected error occurred - {ex}", ex);
                 return StatusCode(500, "Unexpected error occurred while processing the request");
             }
 
@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(AuthRequestDto loginRequestDto)
         {
             try
@@ -57,12 +57,12 @@ namespace API.Controllers
             }
             catch (Exception ex) when (ex is UserDoesNotExistException or IncorrectPasswordException)
             {
-                _logger.Log(LogLevel.Error, $"Failed login attempt for user {loginRequestDto.UserName}");
+                _logger.Log(LogLevel.Error, "Failed login attempt for user {loginRequestDto.UserName}", loginRequestDto.UserName);
                 return BadRequest("Username or password is incorrect");
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Error, $"Unexpected error occurred - {ex}");
+                _logger.Log(LogLevel.Error, "Unexpected error occurred - {ex}", ex);
                 return StatusCode(500, "Unexpected error occurred while processing the request");
             }
         }

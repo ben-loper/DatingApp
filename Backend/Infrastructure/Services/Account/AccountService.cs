@@ -38,9 +38,7 @@ namespace Infrastructure.Services.Account
 
         public async Task<string> LogInAsync(string username, string password)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
-
-            if (user == null) throw new UserDoesNotExistException($"The user [{username}] does not exist");
+            var user = await _userRepository.GetUserByUsernameAsync(username) ?? throw new UserDoesNotExistException($"The user [{username}] does not exist");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
