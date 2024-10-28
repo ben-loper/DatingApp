@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,10 +12,9 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 })
 export class NavComponent {
   loginForm: FormGroup;
-  loggedIn = false;
-  userId!: string;
+  authService = inject(AuthService);
 
-  constructor(private apiService: ApiService, private formBuilder: FormBuilder){
+  constructor(private formBuilder: FormBuilder) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -23,17 +22,15 @@ export class NavComponent {
   }
 
   login(): void {
-    this.apiService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-      next: res => {
-            this.loggedIn = true;
-            this.loginForm.reset();
-            this.userId = res.nameId;
-          },
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
+      next: () => {
+        this.loginForm.reset();
+      },
       error: err => console.log(err)
     })
   }
 
   logout(): void {
-    this.loggedIn = false;
+    this.authService.logout();
   }
 }
