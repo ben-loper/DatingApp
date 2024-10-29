@@ -10,7 +10,9 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   private http = inject(HttpClient);
 
-  currentUser = signal<UserDto | null>(null);
+  private currentUser = signal<UserDto | null>(null);
+  
+  readonlyCurrentUser = this.currentUser.asReadonly();
 
   constructor() {
     const user = this.getCurrentUserFromLocalStorage();
