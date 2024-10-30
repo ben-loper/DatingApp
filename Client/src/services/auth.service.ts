@@ -9,10 +9,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
   private http = inject(HttpClient);
-
-  private currentUser = signal<UserDto | null>(null);
-  
+  private currentUser = signal<UserDto | null>(null);  
   readonlyCurrentUser = this.currentUser.asReadonly();
+
+  private baseUrl = `https://localhost:7211/api/Account`
 
   constructor() {
     const user = this.getCurrentUserFromLocalStorage();
@@ -22,9 +22,24 @@ export class AuthService {
   login(username: string, password: string) : Observable<UserDto> {
     const userAuthDto = new AuthRequestDto(username, password);
 
-    return this.http.post<UserDto>(`https://localhost:7211/api/Account/login`, userAuthDto).pipe(
+    return this.http.post<UserDto>(`${this.baseUrl}/login`, userAuthDto).pipe(
       map(user => {
         if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUser.set(user);
+        }
+        return user;
+      })
+    );
+  }
+
+  register(username: string, password: string) : Observable<UserDto> {
+    const userAuthDto = new AuthRequestDto(username, password);
+
+    return this.http.post<UserDto>(`${this.baseUrl}/register`, userAuthDto).pipe(
+      map(user => {
+        if (user) {
+          this.logout();
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUser.set(user);
         }
@@ -38,7 +53,7 @@ export class AuthService {
     this.currentUser.set(null);
   }
 
-  getCurrentUserFromLocalStorage() : UserDto | null {
+  private getCurrentUserFromLocalStorage() : UserDto | null {
     const user = localStorage.getItem('user');
     if (!user) return null;    
     return JSON.parse(user);

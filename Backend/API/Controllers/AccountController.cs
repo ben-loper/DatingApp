@@ -21,11 +21,17 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(AuthRequestDto registerRequestDto)
+        public async Task<ActionResult<UserDto>> Register(AuthRequestDto registerRequestDto)
         {
             try
             {
-                await _accountService.CreateUserAsync(registerRequestDto.UserName, registerRequestDto.Password);
+                var userToken = await _accountService.CreateUserAsync(registerRequestDto.UserName, registerRequestDto.Password);
+
+                return new UserDto
+                {
+                    Jwt = userToken,
+                    NameId = registerRequestDto.UserName
+                };
             }
             catch (UserAlreadyExistsException)
             {
@@ -37,8 +43,6 @@ namespace API.Controllers
                 _logger.Log(LogLevel.Error, "Unexpected error occurred - {ex}", ex);
                 return StatusCode(500, "Unexpected error occurred while processing the request");
             }
-
-            return Ok();
         }
 
         [AllowAnonymous]

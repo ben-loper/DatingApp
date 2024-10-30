@@ -1,8 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Meal Planning</a>
+<header data-bs-theme="dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Meal Planning</a>
 
-    @if (authService.readonlyCurrentUser()) {
+      @if (authService.readonlyCurrentUser()) {
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
           <a class="nav-link" href="#">Recipes</a>
@@ -13,24 +14,24 @@
       </ul>
       <div class="btn-group" dropdown>
         <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-success"
-                aria-controls="dropdown-basic">
-                Welcome {{authService.readonlyCurrentUser()?.nameId}} <span class="caret"></span>
+          aria-controls="dropdown-basic">
+          Welcome {{authService.readonlyCurrentUser()?.nameId}} <span class="caret"></span>
         </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-            role="menu" aria-labelledby="button-basic">
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
           <li role="menuitem"><a class="dropdown-item" href="#">Edit Profile</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#"(click)="logout()">Logout</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="#" (click)="logout()">Logout</a></li>
         </ul>
       </div>
-    }
-    @else {
+      }
+      @else {
       <form class="d-flex" [formGroup]="loginForm" (ngSubmit)="login()">
         <input id="username" formControlName="username" class="form-control me-2" placeholder="Username" required>
         <input id="password" type="password" formControlName="password" class="form-control me-2" placeholder="Password"
           required>
         <button class="btn btn-outline-success" type="submit" [disabled]="loginForm.invalid">Login</button>
       </form>
-    }
+      }
 
-  </div>
-</nav>
+    </div>
+  </nav>
+</header>

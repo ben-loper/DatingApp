@@ -18,7 +18,7 @@ namespace Infrastructure.Services.Account
             _tokenService = tokenService;
         }
 
-        public async Task<AppUser> CreateUserAsync(string username, string password)
+        public async Task<string> CreateUserAsync(string username, string password)
         {
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
@@ -33,7 +33,11 @@ namespace Infrastructure.Services.Account
                 PasswordSalt = hmac.Key
             };
 
-            return await _userRepository.SaveUserAsync(user);
+            await _userRepository.SaveUserAsync(user);
+
+            // TODO: Maybe throw exception is null is returned for the user
+
+            return _tokenService.CreateToken(user);
         }
 
         public async Task<string> LogInAsync(string username, string password)
