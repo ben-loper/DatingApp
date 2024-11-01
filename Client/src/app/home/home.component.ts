@@ -20,7 +20,7 @@ export class HomeComponent {
     })
   }
 
-  toggleRegisterMode(){
-    this.registerMode = !this.registerMode;
+  toggleRegisterMode(value: boolean){
+    this.registerMode = value;
   }
 }

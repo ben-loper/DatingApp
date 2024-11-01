@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, output, Output } from '@angular/core';
 import {  FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './register-form.component.css'
 })
 export class RegisterFormComponent {
-  @Output() cancelRegistrationEvent = new EventEmitter<void>();
+  cancelRegistrationEvent = output();
   registrationForm: FormGroup;
   authService = inject(AuthService);
 
@@ -21,7 +21,7 @@ export class RegisterFormComponent {
     });
   }
   
-  cancel(){
+  cancel() {
     this.cancelRegistrationEvent.emit();
   }
 

@@ -2,11 +2,11 @@
     <h1>Recipe App</h1>
     <p class="lead">Choosing dinners for the week can be hard. Let us help make it happen. Register or login to begin planning your dinners!</p>
     <p class="lead">
-      <button class="btn btn-primary" (click)="toggleRegisterMode()">Register</button>
+      <button class="btn btn-primary" (click)="toggleRegisterMode(true)">Register</button>
     </p>
 }
 @else if (!authService.readonlyCurrentUser() && registerMode) {
-    <app-register-form (cancelRegistrationEvent)="toggleRegisterMode()"></app-register-form>
+    <app-register-form (cancelRegistrationEvent)="toggleRegisterMode(false)"></app-register-form>
 }
 @else {
     <h1>What are we making today?</h1>
